@@ -1,0 +1,254 @@
+//1 Doctor1 ( d_id , d_name, qualification, specialization )  
+create table Doctor1 
+(
+	D_Id varchar(10) Primary Key ,
+	D_Name varchar(10),
+	Qualification varchar(20),
+	Specialization varchar(20)
+);
+
+insert into Doctor1 values('D001','Dr.Kaushik','MBBS','Heart'); 
+insert into Doctor1 values('D002','Dr.Rohan','BHMS','Cardiologist'); 
+insert into Doctor1 values('D003','Dr.Anil','MBBS','Neurologist'); 
+insert into Doctor1 values('D004','Dr.Bansi','BPT','Joint Replacement'); 
+insert into Doctor1 values('D005','Dr.Tanvi','BPT','Ligament'); 
+
+//2 Doctor2 ( d_id , contact_no )
+create table Doctor2
+(
+	D_Id varchar(10) References Doctor1,
+	Contact_No varchar(10)
+);
+
+insert into Doctor2 values ('D001', 9876543210);
+insert into Doctor2 values ('D002', 9632587401);
+insert into Doctor2 values ('D004', 4520187932);
+insert into Doctor2 values ('D003', 9879532610);
+insert into Doctor2 values ('D005', 9998978799);
+
+//7 Patient1 ( p_id, p_name, address, gender, admitted_date, discharge_date )
+create table Patient1 
+(
+	P_Id varchar(10) Primary Key,
+	P_Name varchar(10),
+	Address varchar(10),
+	Gender varchar(10),
+	Admit_date date,
+	Discharge_Date Date
+);
+
+insert into Patient1 values ('P001','Megh','Anand','Male','20-05-2021','25-05-2021');
+insert into Patient1 values ('P002','Nishadh','Ahmedabad','Male','21-11-2021','22-11-2021');
+insert into Patient1 values ('P003','Rudra','Baroda','Male','31-01-2021','15-02-2021');
+insert into Patient1 values ('P004','Mamm','Surat','Male','14-01-2021','15-01-2021');
+insert into Patient1 values ('P005','Karan','Kachh','Male','22-10-2021','25-10-2021');
+
+
+//8 Patient2 ( p_id ,  contact_no )
+create table  Patient2
+(
+	P_Id varchar(10) References Patient1,
+	Contact_No varchar(10) 
+);
+
+insert into Patient2 values ('P002', 9563214780);
+insert into Patient2 values ('P005', 9845023167);
+insert into Patient2 values ('P004', 6355214598);
+insert into Patient2 values ('P001', 9737858201);
+insert into Patient2 values ('P003', 6353288373);
+
+//3 TREAT_PATIENT1 (  p_id , p_name,  address, gender, admitted_date,  discharge_date, d_id)
+create table Treat_Patient1
+(
+	P_Id varchar(10) References Patient1,
+	P_Name varchar(10),
+	Address varchar(10),
+	Gender varchar(10),
+	Admit_date date,
+	Discharge_Date Date,
+	D_Id varchar(10) References Doctor1
+
+);
+
+insert into Treat_Patient1 values ('P001','Megh','Anand','Male','20-05-2021','25-05-2021','D001');
+insert into Treat_Patient1 values ('P002','Nishadh','Ahmedabad','Male','21-11-2021','22-11-2021','D003');
+insert into Treat_Patient1 values ('P003','Rudra','Baroda','Male','31-01-2021','15-02-2021','D004');
+insert into Treat_Patient1 values ('P004','Mamm','Surat','Male','14-01-2021','15-01-2021','D002');
+insert into Treat_Patient1 values ('P005','Karan','Kachh','Male','22-10-2021','25-10-2021','D005');
+
+//4 TREAT_PATIENT2 (  p_id ,  contact_no )
+create table Treat_Patient2
+(
+	P_Id varchar(10) References Patient1,
+	Contact_No varchar(10)
+);
+
+insert into Treat_Patient2 values ('P005', 6355897410);
+insert into Treat_Patient2 values ('P003', 9662379991);
+insert into Treat_Patient2 values ('P004', 9106662196);
+insert into Treat_Patient2 values ('P002', 9725364189);
+insert into Treat_Patient2 values ('P001', 6352417896);
+
+//6 Medicines ( M_ID , M_Name , Qty )
+create table Medicines
+(
+	M_Id varchar(10) Primary Key,
+	M_Name varchar(10),
+	Qty numeric(6)
+);
+
+insert into Medicines values ('M001','Pera', 2);
+insert into Medicines values ('M002','Decprine', 5);
+insert into Medicines values ('M003','Telvas CT', 10);
+insert into Medicines values ('M004','Livera', 5);
+insert into Medicines values ('M005','Neurobian', 2);
+
+//5 Takes ( p_id , M_ID )
+create table Takes
+(
+	P_Id varchar(10) References Patient1,
+	M_Id varchar(10) References Medicines,
+	Primary Key(P_Id, M_Id)
+);
+
+insert into Takes values ('P001','M002');
+insert into Takes values ('P002','M004');
+insert into Takes values ('P004','M005');
+insert into Takes values ('P005','M001');
+insert into Takes values ('P003','M003');
+
+
+//9 ROOM (room_id, room_type)
+create table Room
+(
+	Room_Id varchar(10) primary key,
+	Room_Type varchar(10)
+);
+
+insert into Room values ('Rm001','Delux');
+insert into Room values ('Rm002','Pre Delux');
+insert into Room values ('Rm003','Private');
+insert into Room values ('Rm004','Day Care');
+insert into Room values ('Rm005','Premium');
+
+//10 Room_assigned (p_id, room_id, room_type)
+create table Room_Assigned 
+(
+	P_Id varchar(10) References Patient1,
+	Room_Id varchar(10) References Room,
+	Room_Type varchar(10)
+);
+
+insert into Room_Assigned values ('P002','Rm001','Delux');
+insert into Room_Assigned values ('P001','Rm002','Pre Delux');
+insert into Room_Assigned values ('P005','Rm003','Private');
+insert into Room_Assigned values ('P003','Rm004','Day Care');
+insert into Room_Assigned values ('P004','Rm005','Premium');
+
+
+//11 NURSE (n_id, n_name)
+create table Nurse
+(
+	N_Id varchar(10) primary key,
+	N_Name varchar(20)
+);
+
+insert into Nurse values ('N001','Kinjal');
+insert into Nurse values ('N002','Mayuri');
+insert into Nurse values ('N003','Karan');
+insert into Nurse values ('N004','Kajal');
+insert into Nurse values ('N005','Harsh');
+
+
+//12 Governs (room_id, n_id)
+create table Governs
+(
+	Room_Id varchar(10),
+	N_Id varchar(10),
+	primary key(room_id, n_id)
+);
+
+insert into Governs values ('Rm001','N002');
+insert into Governs values ('Rm005','N004');
+insert into Governs values ('Rm004','N003');
+insert into Governs values ('Rm002','N005');
+insert into Governs values ('Rm003','N001');
+
+//13 RECEPTIONIST (r_id, r_name)
+create table Receptionist
+(
+	R_Id varchar(10) primary key,
+	R_name varchar(20)
+);
+
+insert into Receptionist values ('R001','Vedant');
+insert into Receptionist values ('R002','Prachi');
+insert into Receptionist values ('R003','Dharmik');
+insert into Receptionist values ('R004','Krupa');
+insert into Receptionist values ('R005','Ishita');
+
+//14 Maintain_Record ( r_id, Record_No , P_ID  )
+create table Maintain_Record
+(
+	R_Id varchar(10) references Receptionist,
+	Record_no numeric(5) primary key,
+	P_Id varchar(10) references Patient1
+);
+
+insert into Maintain_Record values ('R001', 1,'P001');
+insert into Maintain_Record values ('R001', 2,'P005');
+insert into Maintain_Record values ('R002', 3,'P002');
+insert into Maintain_Record values ('R003', 4,'P004');
+insert into Maintain_Record values ('R004', 5,'P003');
+
+//15 Employee1 (E_ID, E_Name, Gender, Address, Salary )
+create table Employee1
+(
+	E_Id varchar(10) primary key,
+	E_Name varchar(20),
+	Gender varchar(6),
+	Address varchar(40),
+	Salary numeric(8, 2)
+);
+
+insert into Employee1 values ('E001','Dr.Kaushik', 'Male', 'Anand', 56321.21);
+insert into Employee1 values ('E002','Dr.Rohan', 'Male', 'Ahmedabad', 45632.95);
+insert into Employee1 values ('E003','Dr.Anil', 'Male', 'Vadodara', 68523.87);
+insert into Employee1 values ('E004','Dr.Bansi', 'Female', 'Anand', 38321.63);
+insert into Employee1 values ('E005','Dr.Tanvi', 'Female', 'Valsad', 48321.15);
+insert into Employee1 values ('E006', 'Kinjal', 'Female', 'Anand', 26315.24);
+insert into Employee1 values ('E007', 'Mayuri', 'Female', 'Vadodara', 25315.24);
+insert into Employee1 values ('E008', 'Karan', 'Male', 'Vadodara', 24315.24);
+insert into Employee1 values ('E009', 'Kajal', 'Female', 'Gandhinagar', 23315.24);
+insert into Employee1 values ('E010', 'Harsh', 'Male', 'Ahmedabad', 22315.24);
+insert into Employee1 values ('E011', 'Vedant', 'Male', 'Vadodara', 18963.57);
+insert into Employee1 values ('E012', 'Prachi', 'Female', 'Anand', 17963.57);
+insert into Employee1 values ('E013', 'Dharmik', 'Male', 'Anand', 16963.57);
+insert into Employee1 values ('E014', 'Krupa', 'Female', 'Nadiad', 15963.57);
+insert into Employee1 values ('E015', 'Ishita', 'Female', 'Gandhinagar', 14963.57);
+
+
+//16 Employee2 (E_ID , Contact_No )
+create table Employee2
+(
+	E_Id varchar(10) References Employee1,
+	Contact_no numeric(10)
+);
+
+insert into Employee2 values ('E001', 9517836420);
+insert into Employee2 values ('E002', 9697563241);
+insert into Employee2 values ('E003', 9687324187);
+insert into Employee2 values ('E004', 9643157621);
+insert into Employee2 values ('E005', 7649538243);
+insert into Employee2 values ('E006', 8161512455);
+insert into Employee2 values ('E007', 6434348165);
+insert into Employee2 values ('E008', 9461379235);
+insert into Employee2 values ('E009', 6353857421);
+insert into Employee2 values ('E010', 9408631790);
+insert into Employee2 values ('E011', 9935793145);
+insert into Employee2 values ('E012', 9632587410);
+insert into Employee2 values ('E013', 8523697410);
+insert into Employee2 values ('E014', 6547893210);
+insert into Employee2 values ('E015', 7539514682);
+
+
